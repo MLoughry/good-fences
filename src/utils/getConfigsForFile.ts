@@ -6,18 +6,23 @@ import getAllConfigs from './getAllConfigs';
 
 // Returns an array of all the configs that apply to a given file
 export default function getConfigsForFile(filePath: NormalizedPath): Config[] {
-    let allConfigs = getAllConfigs();
-    let configsForFile: Config[] = [];
+    return getConfigsForFolder(path.dirname(filePath));
+}
 
-    let pathSegments = normalizePath(path.dirname(filePath)).split(path.sep);
+export function getConfigsForFolder(dirPath: string): Config[] {
+    let allConfigs = getAllConfigs();
+    let configsForDir: Config[] = [];
+
+    let pathSegments = normalizePath(dirPath).split(path.sep);
     while (pathSegments.length) {
         let dirPath = pathSegments.join(path.sep);
         if (allConfigs[dirPath]) {
-            configsForFile.push(allConfigs[dirPath]);
+            configsForDir.push(allConfigs[dirPath]);
         }
 
         pathSegments.pop();
     }
 
-    return configsForFile;
+    return configsForDir;
+
 }
